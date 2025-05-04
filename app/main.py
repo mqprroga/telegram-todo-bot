@@ -10,7 +10,7 @@ import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Инициализация базы данных
+
 models.Base.metadata.create_all(bind=database.engine)
 
 app = FastAPI(title="Telegram Todo Bot API")
