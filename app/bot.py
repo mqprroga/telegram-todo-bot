@@ -16,9 +16,8 @@ logger = logging.getLogger(__name__)
 class TodoBot:
     def __init__(self, token: str):
         self.bot = telebot.TeleBot(token)
-        self.user_states = {}  # Для хранения состояний пользователей
-        
-        # Регистрация обработчиков
+        self.user_states = {}  
+       
         self.bot.message_handler(commands=['start'])(self.start)
         self.bot.callback_query_handler(func=lambda call: True)(self.button)
         self.bot.message_handler(func=lambda m: True)(self.add_task)
@@ -131,14 +130,12 @@ class TodoBot:
             new_task = TodoItem(user_id=user_id, task=task_text)
             db.add(new_task)
             db.commit()
-        
-        # Удаляем сообщение с задачей
+       
             self.bot.delete_message(
                 chat_id=message.chat.id,
                 message_id=message.message_id
             )
-        
-        # Отправляем подтверждение и возвращаем в меню
+       
             keyboard = [[InlineKeyboardButton("В главное меню", callback_data='back')]]
             self.bot.send_message(
                 chat_id=message.chat.id,
@@ -194,8 +191,7 @@ class TodoBot:
                     callback_data=f"delete_task {task.id}"
                 ))
                 keyboard.append(row)
-            
-            # Добавляем кнопку "Назад" в конец
+           
             keyboard.append([InlineKeyboardButton("🔙 Назад", callback_data='back')])
             
             reply_markup = InlineKeyboardMarkup(keyboard)
